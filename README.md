@@ -52,9 +52,13 @@ Testers should check whether the AI can:
 
 ## Current Status
 
-**MVP Ready — Internal Testing Version**
+**MVP Ready — Autonomous + RC Internal Testing**
 
-This version is ready for internal testing, but not yet considered public release. Feedback from testers will be used to improve the pack before it is added to more Cytron tutorials.
+This version is ready for internal testing of both Autonomous Sumo and Radio Controlled paths, but is not considered "public ready" yet. To transition to public release, testers must confirm:
+* They understand the difference between Autonomous, RC, and Hybrid modes.
+* They don't accidentally connect the D3 IR sensor and the RC steering signal at the same time.
+* The signal-loss failsafe works correctly (robot stops when transmitter is powered off).
+* A beginner can successfully follow the RC test sequence without manual instruction.
 
 ## Folder Structure
 
@@ -73,6 +77,16 @@ cytron-ai-coding-pack-urc10/
 ├── project-ideas.md
 ├── troubleshooting.md
 ├── safety-rules.md
+├── rc-validation-checklist.md
+├── rc-mode/
+│   ├── rc-control-context.md
+│   ├── rc-pin-map.md
+│   ├── rc-safety-rules.md
+│   ├── rc-troubleshooting.md
+│   └── code-examples/
+│       ├── 05-rc-receiver-test.ino
+│       ├── 06-radio-controlled-drive.ino
+│       └── 07-hybrid-rc-autonomous-mode.ino
 └── .agents/
     └── skills/
         └── cytron-ai-coding-coach/

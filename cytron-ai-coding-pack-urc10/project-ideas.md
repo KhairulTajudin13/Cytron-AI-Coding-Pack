@@ -108,6 +108,22 @@ Once you have completed the default sumo robot tutorial, try one of these projec
 
 ---
 
+## 7. 📶 Radio Controlled (RC) Extensions (Beginner–Intermediate)
+
+**Goal:** Modify the URC10 to accept controls from an RC transmitter/receiver.
+
+### Ideas to try:
+- **Custom Failsafe Tuning:** Modify the failsafe in `06-radio-controlled-drive.ino` to sound the onboard buzzer or flash the LEDs in a specific pattern if signal is lost, instead of just stopping.
+- **Sensitivity Adjustments:** Implement dual-rates in software to scale down the speed (e.g. max 50% speed) when a switch on the transmitter is toggled, making the robot easier for beginners to drive.
+- **Hybrid Sumo Mode:** Extend `07-hybrid-rc-autonomous-mode.ino` so that when autonomous mode is active, the robot performs actual sumo opponent-chasing logic, but can be instantly overridden by manual RC commands if you toggle the switch.
+
+**Files to use:** 
+- `rc-mode/code-examples/05-rc-receiver-test.ino`
+- `rc-mode/code-examples/06-radio-controlled-drive.ino`
+- `rc-mode/code-examples/07-hybrid-rc-autonomous-mode.ino`
+
+---
+
 ## Note on Side Sensors — Beginner to Intermediate Progression
 
 The beginner sumo sketch (`03-basic-sumo-behavior.ino`) intentionally omits the two side opponent sensors:

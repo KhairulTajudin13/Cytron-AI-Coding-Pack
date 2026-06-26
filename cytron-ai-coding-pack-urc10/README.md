@@ -30,6 +30,8 @@ This pack is designed to help you **continue learning after completing the basic
 | `project-ideas.md` | Ideas to extend your robot beyond sumo |
 | `troubleshooting.md` | Common problems and fixes |
 | `source-audit.md` | Technical review of original source documents |
+| `rc-mode/` | Documentation and sketches for Radio Controlled extension |
+| `rc-validation-checklist.md` | Verification checklist for RC path implementation |
 
 ---
 
