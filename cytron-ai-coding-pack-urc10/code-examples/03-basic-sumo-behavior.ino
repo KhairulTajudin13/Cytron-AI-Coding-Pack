@@ -55,14 +55,18 @@
 #include <CytronMotorDriver.h>
 
 // --- Pin Definitions ---
-#define LED0        0   // Onboard LED 0 (active-low: LOW = ON)
-#define LED1        1   // Onboard LED 1 (active-low: LOW = ON)
-#define BUTTON      13  // Start / stop button (active-low: LOW = pressed)
-#define EDGE_L      12  // Left edge sensor   (active-low: LOW = edge detected)
-#define EDGE_R      11  // Right edge sensor  (active-low: LOW = edge detected)
-#define OPPONENT_FR A0  // Front-right opponent sensor (active-low)
-#define OPPONENT_FC A1  // Front-center opponent sensor (active-low)
-#define OPPONENT_FL A2  // Front-left opponent sensor (active-low)
+#define LED0              0   // Onboard LED 0 (active-low: LOW = ON)
+#define LED1              1   // Onboard LED 1 (active-low: LOW = ON)
+//
+// START_BUTTON_PIN = A4
+// This is the standard pin for the 1KG Autonomous Sumo Robot Starter Kit wiring guide.
+// If you wired your button to D13 (legacy sample code) or D2, change A4 below to match.
+#define START_BUTTON_PIN  A4  // Start / stop button (active-low: LOW = pressed)
+#define EDGE_L            12  // Left edge sensor   (active-low: LOW = edge detected)
+#define EDGE_R            11  // Right edge sensor  (active-low: LOW = edge detected)
+#define OPPONENT_FR       A0  // Front-right opponent sensor (active-low)
+#define OPPONENT_FC       A1  // Front-center opponent sensor (active-low)
+#define OPPONENT_FL       A2  // Front-left opponent sensor (active-low)
 
 // ⚠️ D4, D5, D6, D7 are reserved for the motor driver — DO NOT use them
 //    for sensors, LEDs, or any other purpose.
@@ -93,7 +97,7 @@ CytronMD motorR(PWM_DIR, 6, 7);
 void setup() {
   // Configure all sensor and button pins.
   // INPUT_PULLUP means: not triggered = HIGH, triggered = LOW.
-  pinMode(BUTTON,      INPUT_PULLUP);
+  pinMode(START_BUTTON_PIN, INPUT_PULLUP);
   pinMode(EDGE_L,      INPUT_PULLUP);
   pinMode(EDGE_R,      INPUT_PULLUP);
   pinMode(OPPONENT_FL, INPUT_PULLUP);
@@ -116,14 +120,14 @@ void setup() {
   // The robot will not move until the button is pressed.
   // While waiting, LED1 mirrors the LEFT edge sensor
   // and LED0 mirrors the RIGHT edge sensor — useful for placing the robot.
-  while (digitalRead(BUTTON) == HIGH) {
+  while (digitalRead(START_BUTTON_PIN) == HIGH) {
     // Show edge sensor state on LEDs for easy placement calibration.
     digitalWrite(LED1, digitalRead(EDGE_L));  // LOW = triggered = LED on
     digitalWrite(LED0, digitalRead(EDGE_R));  // LOW = triggered = LED on
   }
 
   // Wait until the button is released.
-  while (digitalRead(BUTTON) == LOW);
+  while (digitalRead(START_BUTTON_PIN) == LOW);
 
   // Signal that the match is starting — turn both LEDs on.
   digitalWrite(LED0, LOW);
@@ -223,7 +227,7 @@ void loop() {
   // If the Start button is pressed during a match, stop immediately and halt.
   // =========================================================================
 
-  if (digitalRead(BUTTON) == LOW) {
+  if (digitalRead(START_BUTTON_PIN) == LOW) {
     motorL.setSpeed(0);
     motorR.setSpeed(0);
     digitalWrite(LED0, HIGH);  // LEDs off

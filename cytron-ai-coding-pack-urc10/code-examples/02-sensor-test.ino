@@ -30,8 +30,9 @@
  *   if (digitalRead(SENSOR_PIN) == LOW)   ← triggered
  *   if (!digitalRead(SENSOR_PIN))         ← same thing using NOT operator
  *
- * PINOUT USED IN THIS SKETCH (matches original sample code):
- *   D13 = Start button
+ * PINOUT USED IN THIS SKETCH (1KG Autonomous Sumo Robot Starter Kit standard):
+ *   A4  = Start button  ← kit wiring guide standard
+ *          (Legacy note: older sample code used D13; some tutorials reference D2)
  *   D12 = Edge sensor LEFT
  *   D11 = Edge sensor RIGHT
  *   D3  = Opponent sensor LEFT (side)
@@ -50,14 +51,18 @@
 #include <CytronMotorDriver.h>
 
 // --- Sensor and Button Pin Definitions ---
-#define BUTTON      13  // Start button
-#define EDGE_L      12  // Left edge / floor sensor
-#define EDGE_R      11  // Right edge / floor sensor
-#define OPPONENT_L   3  // Side opponent sensor — LEFT
-#define OPPONENT_R  10  // Side opponent sensor — RIGHT
-#define OPPONENT_FR A0  // Front opponent sensor — FRONT RIGHT
-#define OPPONENT_FC A1  // Front opponent sensor — FRONT CENTER
-#define OPPONENT_FL A2  // Front opponent sensor — FRONT LEFT
+//
+// START_BUTTON_PIN = A4
+// This is the standard pin for the 1KG Autonomous Sumo Robot Starter Kit wiring guide.
+// If you wired your button to D13 (legacy sample code) or D2, change A4 below to match.
+#define START_BUTTON_PIN A4  // Start button
+#define EDGE_L           12  // Left edge / floor sensor
+#define EDGE_R           11  // Right edge / floor sensor
+#define OPPONENT_L        3  // Side opponent sensor — LEFT
+#define OPPONENT_R       10  // Side opponent sensor — RIGHT
+#define OPPONENT_FR      A0  // Front opponent sensor — FRONT RIGHT
+#define OPPONENT_FC      A1  // Front opponent sensor — FRONT CENTER
+#define OPPONENT_FL      A2  // Front opponent sensor — FRONT LEFT
 
 // --- LED Pins ---
 // ⚠️ WARNING: LED0 (D0) = TX and LED1 (D1) = RX — the same pins used by Serial.
@@ -75,7 +80,7 @@
 void setup() {
   // INPUT_PULLUP enables a built-in resistor that keeps the pin at HIGH
   // when nothing is connected. When the sensor fires, it pulls the pin LOW.
-  pinMode(BUTTON,      INPUT_PULLUP);
+  pinMode(START_BUTTON_PIN, INPUT_PULLUP);
   pinMode(EDGE_L,      INPUT_PULLUP);
   pinMode(EDGE_R,      INPUT_PULLUP);
   pinMode(OPPONENT_L,  INPUT_PULLUP);
@@ -144,7 +149,7 @@ void loop() {
   printSensor("OPPONENT_FR   (A0) ", OPPONENT_FR);
 
   // --- Start Button ---
-  printSensor("BUTTON        (D13)", BUTTON);
+  printSensor("START_BUTTON  (A4) ", START_BUTTON_PIN);
 
   Serial.println();
 

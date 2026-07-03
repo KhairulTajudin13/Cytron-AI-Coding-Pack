@@ -44,14 +44,18 @@
 #define DEBUG_MODE true
 
 // --- Pin Definitions ---
-#define LED0        0   // Onboard LED 0 (active-low: LOW = ON)
-#define LED1        1   // Onboard LED 1 (active-low: LOW = ON)
-#define BUTTON      13  // Start / stop button (active-low)
-#define EDGE_L      12  // Left edge sensor   (active-low)
-#define EDGE_R      11  // Right edge sensor  (active-low)
-#define OPPONENT_FR A0  // Front-right opponent sensor (active-low)
-#define OPPONENT_FC A1  // Front-center opponent sensor (active-low)
-#define OPPONENT_FL A2  // Front-left opponent sensor (active-low)
+#define LED0              0   // Onboard LED 0 (active-low: LOW = ON)
+#define LED1              1   // Onboard LED 1 (active-low: LOW = ON)
+//
+// START_BUTTON_PIN = A4
+// This is the standard pin for the 1KG Autonomous Sumo Robot Starter Kit wiring guide.
+// If you wired your button to D13 (legacy sample code) or D2, change A4 below to match.
+#define START_BUTTON_PIN  A4  // Start / stop button (active-low)
+#define EDGE_L            12  // Left edge sensor   (active-low)
+#define EDGE_R            11  // Right edge sensor  (active-low)
+#define OPPONENT_FR       A0  // Front-right opponent sensor (active-low)
+#define OPPONENT_FC       A1  // Front-center opponent sensor (active-low)
+#define OPPONENT_FL       A2  // Front-left opponent sensor (active-low)
 
 // --- Speed Settings ---
 // ✏️ You can change these values to tune your robot:
@@ -88,7 +92,7 @@ void debugPrint(const char* message) {
  * Configure pins, start Serial if debug mode is on, wait for Start button.
  *******************************************************************************/
 void setup() {
-  pinMode(BUTTON,      INPUT_PULLUP);
+  pinMode(START_BUTTON_PIN, INPUT_PULLUP);
   pinMode(EDGE_L,      INPUT_PULLUP);
   pinMode(EDGE_R,      INPUT_PULLUP);
   pinMode(OPPONENT_FL, INPUT_PULLUP);
@@ -112,11 +116,11 @@ void setup() {
   }
 
   // --- Wait for Start Button ---
-  while (digitalRead(BUTTON) == HIGH) {
+  while (digitalRead(START_BUTTON_PIN) == HIGH) {
     digitalWrite(LED1, digitalRead(EDGE_L));
     digitalWrite(LED0, digitalRead(EDGE_R));
   }
-  while (digitalRead(BUTTON) == LOW);
+  while (digitalRead(START_BUTTON_PIN) == LOW);
 
   // LEDs on = match starting.
   digitalWrite(LED0, LOW);
@@ -220,7 +224,7 @@ void loop() {
   // EMERGENCY STOP
   // =========================================================================
 
-  if (digitalRead(BUTTON) == LOW) {
+  if (digitalRead(START_BUTTON_PIN) == LOW) {
     debugPrint("[STOP]  Button pressed. Halting.");
     motorL.setSpeed(0);
     motorR.setSpeed(0);

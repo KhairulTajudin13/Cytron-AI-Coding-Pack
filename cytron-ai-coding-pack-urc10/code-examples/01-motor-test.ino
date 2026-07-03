@@ -12,7 +12,7 @@
  * Step 2: Select Board: Arduino Uno | Port: your COM port.
  * Step 3: Upload this sketch.
  * Step 4: ** LIFT THE ROBOT WHEELS OFF THE GROUND BEFORE PRESSING START **
- * Step 5: Press the Start button (D13) on the board.
+ * Step 5: Press the Start button (A4) — this is the standard pin for the 1KG kit wiring.
  * Step 6: Watch the wheels spin and confirm:
  *           - Both wheels spin FORWARD (outward from the robot body)
  *           - Both wheels spin BACKWARD (inward)
@@ -36,7 +36,10 @@
 // --- Pin Definitions ---
 #define LED0   0   // Onboard LED 0 (active-low: LOW = ON, HIGH = OFF)
 #define LED1   1   // Onboard LED 1 (active-low: LOW = ON, HIGH = OFF)
-#define BUTTON 13  // Start button  (active-low: pressed = LOW)
+// START_BUTTON_PIN = A4
+// This matches the 1KG Autonomous Sumo Robot Starter Kit wiring guide.
+// If you wired your button to D13 or D2 instead, change A4 below to match.
+#define START_BUTTON_PIN A4  // Start button (active-low: pressed = LOW)
 
 // --- Motor Objects ---
 // CytronMD(mode, pwmPin, dirPin)
@@ -53,7 +56,7 @@ CytronMD motorR(PWM_DIR, 6, 7);
  * Runs once on power-up. Configures pins and waits for the Start button.
  *******************************************************************************/
 void setup() {
-  pinMode(BUTTON, INPUT_PULLUP);
+  pinMode(START_BUTTON_PIN, INPUT_PULLUP);
   pinMode(LED0,   OUTPUT);
   pinMode(LED1,   OUTPUT);
 
@@ -68,7 +71,7 @@ void setup() {
 
   // Blink LED0 slowly while waiting for the Start button.
   // This confirms the board is powered and ready.
-  while (digitalRead(BUTTON) == HIGH) {  // BUTTON reads HIGH when NOT pressed
+  while (digitalRead(START_BUTTON_PIN) == HIGH) {  // START_BUTTON_PIN reads HIGH when NOT pressed
     digitalWrite(LED0, LOW);   // LED on
     delay(300);
     digitalWrite(LED0, HIGH);  // LED off
@@ -76,7 +79,7 @@ void setup() {
   }
 
   // Wait for the button to be fully released before starting the test.
-  while (digitalRead(BUTTON) == LOW);
+  while (digitalRead(START_BUTTON_PIN) == LOW);
 
   // Both LEDs on = test is about to begin.
   digitalWrite(LED0, LOW);
