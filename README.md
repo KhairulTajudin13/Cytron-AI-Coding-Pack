@@ -1,101 +1,100 @@
-# Cytron AI Coding Pack
+# Cytron AI Coding Pack Repository
 
-This repository contains the pilot version of the **Cytron AI Coding Pack**.
+This repository contains the official **Cytron AI Coding Packs**, designed to help users continue learning after completing a Cytron hardware tutorial.
 
-The purpose of this project is to help users continue learning after completing a Cytron tutorial. Instead of only following a basic getting-started guide, users can open this pack in an AI coding tool such as **Antigravity** and ask AI to explain, modify, debug, or expand the project based on Cytron product guidance.
+Instead of following static getting-started guides, users open a coding pack in an AI coding assistant (such as **Antigravity**) to explain code, upgrade features, debug hardware issues, and safely expand projects using dedicated Cytron AI Coach guidance.
 
-## Current Pilot Product
+---
 
-The current test product is:
+## 📦 Available Coding Packs
 
-**URC10 — Sumo Robot Controller**
+This repository currently includes two active Cytron AI Coding Packs:
 
-This pack is designed to help users learn and experiment with URC10 safely while following the correct product context, pin mapping, library usage, and safety rules.
+### 1. `cytron-ai-coding-pack-maker-esp32/`
+- **Target Hardware:** Cytron Maker ESP32 (ESP32-WROOM-32E-N8, USB Type-C, 1.35A 3.3V LDO regulator)
+- **Primary Learning Path:** Telegram Bot Remote Control, Dot Matrix NTP Clock, and Vibe-Coding IoT Projects
+- **Key Features:** Built-in GPIO LEDs, Onboard Piezo Buzzer (GPIO26), User Button (GPIO4), USB-C power rail
+- **Included Sample Code:**
+  - `sample-code/telegram-basic.ino` — Baseline Telegram bot control sketch
+  - `sample-code/dot-matrix-clock-maker-esp32.ino` — Dot Matrix NTP Clock (CS mapped to GPIO17 to avoid GPIO26 buzzer, fixed buffer overflow)
 
-## What This Pack Helps With
+### 2. `cytron-ai-coding-pack-urc10/`
+- **Target Hardware:** URC10 Sumo Robot Controller (ATmega328P, 10A Continuous Dual Motor Driver)
+- **Primary Learning Path:** Autonomous Sumo Robot & Radio-Controlled (RC) Sumo Robot
+- **Key Features:** Pre-routed motor pins (D4, D5, D6, D7), high-current motor terminals, dedicated sensor headers
 
-Users can use this AI Coding Pack to:
+---
 
-* understand the original tutorial and sample code
-* modify robot behavior
-* debug motor or sensor issues
-* learn how the code works
-* build beginner-friendly project extensions
-* avoid common mistakes such as wrong pins, wrong library, or unsafe motor testing
+## 🎯 What These Packs Help With
 
-## Important Note
+Users can use these AI Coding Packs to:
+* **Understand** original tutorial sketches line-by-line in plain beginner language
+* **Modify** project behavior (e.g. add LED indicators, adjust matrix scroll speeds, change robot tactics)
+* **Debug** hardware issues step-by-step before altering code
+* **Avoid critical hardware mistakes** (e.g. GPIO26 buzzer screeching on Maker ESP32, motor pin conflicts on URC10, reverse polarity warnings)
 
-This pack is **not meant to replace the original Cytron tutorial**.
+> 💡 **Note:** These AI Coding Packs are designed to **extend** official Cytron tutorials, not replace them. Users should first complete the official tutorial setup before opening the pack in Antigravity for AI-assisted learning.
 
-Users should first complete the official tutorial, make sure the basic setup works, and only then use this AI Coding Pack to explore further with AI.
+---
 
-## How to Use
+## 🚀 How to Use
 
-1. Click **Code → Download ZIP**
-2. Extract the ZIP file
-3. Open the extracted folder in **Antigravity**
-4. Start a new chat
-5. Use the prompts in `TESTER-GUIDE.md`
-6. Record your feedback using `FEEDBACK-FORM.md`
+1. Click **Code → Download ZIP** (or clone this repository).
+2. Extract the ZIP file on your computer.
+3. Open the specific coding pack folder (e.g., `cytron-ai-coding-pack-maker-esp32`) in **Antigravity**.
+4. Start a new chat with Antigravity.
+5. Use the prompts provided in `prompts/` or `TESTER GUIDE.md`.
+6. Record testing results using `FEEDBACK FORM.md`.
 
-## Recommended Testing Flow
+---
 
-Testers should check whether the AI can:
-
-* identify the correct Cytron product
-* use the correct programming platform
-* follow the correct URC10 pin mapping
-* use the correct Cytron motor driver library
-* avoid unsafe hardware advice
-* explain code clearly for beginners
-* help users modify and debug the project
-
-## Current Status
-
-**MVP Ready — Autonomous + RC Internal Testing**
-
-This version is ready for internal testing of both Autonomous Sumo and Radio Controlled paths, but is not considered "public ready" yet. To transition to public release, testers must confirm:
-* They understand the difference between Autonomous, RC, and Hybrid modes.
-* They don't accidentally connect the D3 IR sensor and the RC steering signal at the same time.
-* The signal-loss failsafe works correctly (robot stops when transmitter is powered off).
-* A beginner can successfully follow the RC test sequence without manual instruction.
-
-## Folder Structure
+## 📁 Repository Structure
 
 ```text
-cytron-ai-coding-pack-urc10/
-├── README.md
-├── start-here.md
-├── source-audit.md
-├── product-context.md
-├── tutorial-summary.md
-├── hardware-setup.md
-├── pin-map.md
-├── library-reference.md
-├── code-examples/
-├── ai-prompts/
-├── project-ideas.md
-├── troubleshooting.md
-├── safety-rules.md
-├── rc-validation-checklist.md
-├── rc-mode/
-│   ├── rc-control-context.md
-│   ├── rc-pin-map.md
-│   ├── rc-safety-rules.md
-│   ├── rc-troubleshooting.md
-│   └── code-examples/
-│       ├── 05-rc-receiver-test.ino
-│       ├── 06-radio-controlled-drive.ino
-│       └── 07-hybrid-rc-autonomous-mode.ino
-└── .agents/
-    └── skills/
-        └── cytron-ai-coding-coach/
+Cytron-AI-Coding-Pack/
+├── README.md                          # Repository Overview
+├── TESTER GUIDE.md                    # Multi-Pack Testing Guide & Prompts
+├── FEEDBACK FORM.md                   # Tester Feedback & Evaluation Sheet
+├── source-audit.md                    # Technical Audits (URC10 & Maker ESP32)
+│
+├── cytron-ai-coding-pack-maker-esp32/ # Maker ESP32 AI Coding Pack
+│   ├── README.md                      # Pack getting started guide
+│   ├── start-here.md                  # Quick workflow overview
+│   ├── product-context.md             # Maker ESP32 specs & architecture
+│   ├── board-features.md              # Onboard peripherals (LEDs, buzzer, button)
+│   ├── pin-map.md                     # Safe pin allocation rules
+│   ├── electrical-and-safety-rules.md # 5V power, current limits, logic levels
+│   ├── troubleshooting.md             # Common upload, Wi-Fi & display fixes
+│   ├── project-upgrade-ideas.md       # Ideas for post-tutorial projects
+│   ├── sample-code/
+│   │   ├── README.md
+│   │   ├── telegram-basic.ino         # Original Telegram tutorial baseline
+│   │   └── dot-matrix-clock-maker-esp32.ino # Updated NTP Dot Matrix Clock
+│   ├── prompts/
+│   │   ├── 01-explain-code.md
+│   │   ├── 02-upgrade-telegram-project.md
+│   │   └── 03-debug-project.md
+│   └── .agents/
+│       └── skills/
+│           └── cytron-maker-esp32-ai-coach/
+│               └── SKILL.md           # Maker ESP32 AI Coach system skill
+│
+└── cytron-ai-coding-pack-urc10/       # URC10 Sumo Robot Controller Pack
+    ├── README.md
+    ├── start-here.md
+    ├── product-context.md
+    ├── pin-map.md
+    ├── safety-rules.md
+    ├── sample-code/
+    └── .agents/
+        └── skills/
+            └── cytron-ai-coding-coach/
 ```
 
-## Testing Goal
+---
 
-The main goal of this test is to answer one question:
+## 🧪 Testing Goal
 
-> Can the AI Coach help a beginner understand, modify, debug, and expand a Cytron tutorial safely and accurately?
+Our core evaluation objective across all packs is:
 
-If the answer is yes, this concept can be expanded to other Cytron products and tutorials.
+> **Can the AI Coach guide a beginner to safely understand, upgrade, debug, and expand Cytron tutorial projects without introducing hardware conflicts or dangerous advice?**

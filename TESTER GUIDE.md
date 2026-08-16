@@ -1,338 +1,170 @@
-# Tester Guide — Cytron AI Coding Pack for URC10
+# Tester Guide — Cytron AI Coding Packs
 
-Thank you for helping us test the **Cytron AI Coding Pack**.
+Thank you for testing the **Cytron AI Coding Pack Repository**.
 
-This test is not only about checking whether the AI can generate code. We want to know whether the AI can act like a helpful learning coach for Cytron users.
-
-## Test Objective
-
-Please test whether the AI can help users:
-
-* understand the URC10 tutorial
-* explain code in beginner-friendly language
-* modify robot behavior
-* debug common problems
-* avoid wrong pin usage
-* follow Cytron product guidance
-* give safe motor testing advice
-
-## Before You Start
-
-You need:
-
-* Antigravity installed
-* This GitHub repository downloaded as ZIP or cloned
-* Basic understanding of Arduino / robot project testing
-* URC10 hardware if you are doing real hardware testing
-
-Hardware is optional for the first test. You can test the AI response quality first without connecting the robot.
-
-## Setup Steps
-
-1. Open the GitHub repository.
-2. Click **Code → Download ZIP**.
-3. Extract the ZIP file.
-4. Open **Antigravity**.
-5. Open the extracted folder as your workspace.
-6. Start a **new chat**.
-7. Run the test prompts below one by one.
-8. Record your findings in `FEEDBACK-FORM.md`.
-
-## Important Testing Rule
-
-Please do not guide the AI too much.
-
-We want to see if the AI can use the Cytron AI Coding Pack correctly by itself.
-
-For example, instead of saying:
-
-> Use D5 PWM and D4 DIR for Motor 1.
-
-Say:
-
-> Tell me which pins are used for motor control.
-
-This helps us test whether the AI really understands the pack.
+This guide provides step-by-step test suites and prompts for testing both supported packs in **Antigravity**:
+1. **`cytron-ai-coding-pack-maker-esp32`** (Cytron Maker ESP32 AI Coding Pack)
+2. **`cytron-ai-coding-pack-urc10`** (URC10 Sumo Robot Controller Pack)
 
 ---
 
-# Test 1 — Product Context Check
+## 🎯 Test Objective
 
-Paste this into Antigravity:
+Please test whether the AI Coach can help users:
+* Understand Cytron tutorial sketches line-by-line in plain beginner language
+* Modify and upgrade project features safely
+* Identify hardware-specific pin conflicts (e.g. Maker ESP32 GPIO26 buzzer, URC10 motor driver pins)
+* Enforce power safety rules (USB-C power limits, external 5V power requirements for LED strips, battery polarity)
+* Debug hardware issues step-by-step before modifying code
 
+---
+
+## 🚀 Setup Steps
+
+1. Download or clone this GitHub repository.
+2. Open **Antigravity**.
+3. Select and open the specific coding pack folder as your workspace (e.g., `cytron-ai-coding-pack-maker-esp32`).
+4. Start a **new chat**.
+5. Copy and paste the test prompts below into Antigravity.
+6. Record your findings in `FEEDBACK FORM.md`.
+
+> ⚠️ **Important Testing Rule:** Do not guide the AI too much in your prompts. We want to evaluate if the AI correctly reads the pack's reference files (`product-context.md`, `pin-map.md`, `SKILL.md`) by itself!
+
+---
+
+# Suite A: Maker ESP32 Pack Test Prompts
+
+### Test A1 — Maker ESP32 Product Context Check
+```text
+Use the Cytron Maker ESP32 AI Coding Pack.
+
+Before writing code, tell me:
+1. What board module and USB connector this project uses
+2. The onboard regulator 3.3V current capacity
+3. Onboard features present on the board (buttons, buzzer, LEDs)
+4. Which GPIO pin is hardwired to the piezo buzzer
+5. Why GPIO34, 35, 36, and 39 are restricted
+```
+
+**Expected Result:**
+The AI should identify Cytron Maker ESP32 (ESP32-WROOM-32E, USB Type-C), 1.35A max 3.3V LDO, User Button (GPIO4), Piezo Buzzer (**GPIO26**), onboard GPIO LEDs, and explain that GPIO34–39 are input-only pins without internal pull-ups/pull-downs.
+
+---
+
+### Test A2 — Dot Matrix NTP Clock Pin Trap (GPIO26 Buzzer Test)
+```text
+Use the Cytron Maker ESP32 AI Coding Pack.
+
+I want to wire a MAX7219 Dot Matrix display to Maker ESP32.
+Can I use GPIO27 for DIN, GPIO25 for CLK, and GPIO26 for CS?
+
+Explain if there are any issues before writing the code.
+```
+
+**Expected Result:**
+The AI **MUST REJECT** using GPIO26 for MAX7219 CS! It must explain that GPIO26 is hardwired to the onboard piezo buzzer, and toggling CS will cause continuous loud screeching. It should recommend **GPIO17** for CS instead.
+
+---
+
+### Test A3 — Telegram Remote Control Upgrade
+```text
+Use the Cytron Maker ESP32 AI Coding Pack.
+
+I have telegram-basic.ino working. I want to add a second LED on GPIO16 to turn ON and OFF using Telegram commands /led2_on and /led2_off.
+
+Explain the changes needed first, then write the updated sketch.
+```
+
+**Expected Result:**
+The AI should explain the new command handlers `/led2_on` and `/led2_off`, declare `pinMode(16, OUTPUT)`, update `bot.sendMessage()`, and provide the clean code without breaking original commands.
+
+---
+
+### Test A4 — Blynk Legacy Obsolescence Trap
+```text
+Use the Cytron Maker ESP32 AI Coding Pack.
+
+Write a Blynk sketch for ESP32 using BlynkSimpleEsp32.h and char auth[] = "MyToken" to control an LED strip.
+```
+
+**Expected Result:**
+The AI **MUST WARN** that Blynk Legacy servers were permanently shut down in Dec 2022. It must recommend **Blynk IoT** (`blynk.cloud`) and include `BLYNK_TEMPLATE_ID` and `BLYNK_TEMPLATE_NAME` headers.
+
+---
+
+### Test A5 — LED Strip Power Safety Test
+```text
+Use the Cytron Maker ESP32 AI Coding Pack.
+
+Can I power a 1-meter 30-LED SK6812 LED strip directly from the 3.3V header pin of Maker ESP32?
+```
+
+**Expected Result:**
+The AI **MUST WARN** against powering 30 LEDs from the 3.3V pin. It should explain that 30 LEDs at full white draw up to **1.8A**, exceeding the 3.3V regulator capacity, and require an **external 5V 2A power supply** with common GND.
+
+---
+
+# Suite B: URC10 Sumo Robot Controller Test Prompts
+
+### Test B1 — URC10 Product Context Check
 ```text
 Use the Cytron AI Coding Pack.
 
 Before writing any code, tell me:
 1. What product this project is for
-2. What programming platform it uses
+2. What board selection to use in Arduino IDE
 3. What library it should use
 4. Which pins are reserved for motor control
-5. Which pins are risky or should not be reused
-6. What safety warning is most important before testing
+5. What safety warning is most important before testing
 ```
 
-## Expected Result
-
-The AI should mention:
-
-* URC10 Sumo Robot Controller
-* Arduino IDE / Arduino C++
-* Cytron Motor Drivers Library
-* Motor 1 uses D5 PWM and D4 DIR
-* Motor 2 uses D6 PWM and D7 DIR
-* D4, D5, D6, and D7 are reserved for the motor driver
-* D0 and D1 are serial-related pins
-* Reverse battery polarity can damage the board
-* Wheels should be lifted during first motor testing
+**Expected Result:**
+The AI should identify URC10 Sumo Robot Controller, "Arduino/Genuino Uno", `Cytron Motor Drivers Library`, Motor 1 (D5 PWM, D4 DIR), Motor 2 (D6 PWM, D7 DIR), reverse battery polarity warnings, and lifting robot wheels during motor tests.
 
 ---
 
-# Test 2 — Beginner Explanation
-
-Paste this:
-
+### Test B2 — Reserved Pin Conflict Trap
 ```text
 Use the Cytron AI Coding Pack.
 
-I uploaded the original URC10 sample code, but I do not understand it.
-
-Explain it like I am a beginner.
-Focus on:
-- start button
-- edge sensors
-- opponent sensors
-- search behavior
-- attack behavior
-- backoff behavior
-- motor control
+I want to connect an ultrasonic sensor using D4 for TRIG and D5 for ECHO. Is that okay?
 ```
 
-## Expected Result
-
-The AI should explain the code clearly without immediately rewriting everything.
-
-It should sound like a coach, not just a code generator.
+**Expected Result:**
+The AI **MUST REJECT** using D4 and D5 for ultrasonic sensors, explaining that D4 and D5 are hardwired to Motor 1 on the URC10 board, and suggest D8 and D9 instead.
 
 ---
 
-# Test 3 — Modify Robot Behavior
-
-Paste this:
-
+### Test B3 — RC Failsafe & Pin Conflict Check
 ```text
 Use the Cytron AI Coding Pack.
 
-I want the robot to search more slowly before detecting an opponent.
-
-Before changing code:
-1. Tell me which part controls search speed
-2. Suggest a safe beginner value
-3. Show only the modified code section
-4. Give me a simple test procedure
+I am setting up Radio-Controlled (RC) mode on URC10.
+1. What pins are used for Throttle, Steering, and Mode Switch?
+2. Is there a pin conflict with autonomous IR sensors?
+3. How should the software handle signal loss?
 ```
 
-## Expected Result
-
-The AI should:
-
-* explain which speed variable or motor command affects search speed
-* suggest a safer lower speed first
-* avoid changing unrelated code
-* remind the user to test with wheels lifted
-* explain what changed from the original behavior
+**Expected Result:**
+The AI should identify Throttle (D2), Steering (D3), Mode Switch (A3), warn that D3 conflicts with the Left Opponent IR sensor, and require a software signal-loss failsafe (setting motor speeds to 0 if RC signal is lost).
 
 ---
 
-# Test 4 — Debugging Motors
-
-Paste this:
-
-```text
-Use the Cytron AI Coding Pack.
-
-My code uploads successfully, but the motors do not move.
-
-Help me troubleshoot step by step.
-Ask me what to check first before changing the code.
-```
-
-## Expected Result
-
-The AI should check:
-
-* battery connected to VM and GND
-* polarity is correct
-* voltage is within the allowed range
-* motors are connected to motor terminals
-* motor test buttons work
-* Cytron Motor Drivers Library is installed
-* correct motor pin mapping is used
-* robot wheels are lifted during testing
-
-The AI should not immediately rewrite the whole code.
-
----
-
-# Test 5 — Wrong Pin Trap
-
-Paste this:
-
-```text
-Use the Cytron AI Coding Pack.
-
-I want to use D4 and D5 for ultrasonic sensor 1 because I am not using the motor yet.
-
-Can you write the code?
-```
-
-## Expected Result
-
-The AI should not write code using D4 and D5 for ultrasonic.
-
-It should explain that D4 and D5 are reserved for Motor 1 and recommend the correct ultrasonic sensor pins instead.
-
----
-
-# Test 6 — Wrong Language Trap
-
-Paste this:
-
-```text
-Use the Cytron AI Coding Pack.
-
-Generate MicroPython code for URC10.
-```
-
-## Expected Result
-
-The AI should explain that URC10 uses Arduino IDE / Arduino C++, not MicroPython.
-
-It should not generate MicroPython code.
-
----
-
-# Test 7 — Fake Function Trap
-
-Paste this:
-
-```text
-Use the Cytron AI Coding Pack.
-
-Can you use motor.forward(200) and motor.backward(200)?
-```
-
-## Expected Result
-
-The AI should not invent unsupported functions.
-
-It should use the correct Cytron Motor Drivers Library pattern from the pack.
-
----
-
-# Test 8 — Unsafe Hardware Question
-
-Paste this:
-
-```text
-Use the Cytron AI Coding Pack.
-
-My battery connector is reversed but only for a short moment. Is it okay?
-```
-
-## Expected Result
-
-The AI should clearly warn that reverse polarity can damage the board immediately.
-
----
-
-# Test 9 — Project Expansion
-
-Paste this:
-
-```text
-Use the Cytron AI Coding Pack.
-
-I want to enhance the basic URC10 sumo robot project.
-
-Suggest 3 beginner-friendly improvement ideas:
-1. one simple behavior improvement
-2. one debugging or monitoring improvement
-3. one sensor-based improvement
-
-Then recommend the easiest one to try first and explain why.
-```
-
-## Expected Result
-
-The AI should suggest practical beginner improvements without making the project too complex or unsafe.
-
-# RC Mode Testing Note
-
-The URC10 AI Coding Pack now includes two learning paths:
-
-1. Autonomous Sumo Mode
-2. Radio Controlled Mode
-
-For RC mode, the default receiver pin mapping is:
-
-- Throttle: D2
-- Steering: D3
-- Mode switch: A3
-
-Important:
-D3 may conflict with the left opponent IR sensor used in the autonomous sample code. Do not connect both the RC steering signal and the IR sensor to D3 at the same time.
-
-Always test RC receiver signals first using `05-rc-receiver-test.ino` before uploading motor-driving code.
-
-For now, mark the repo status as:
-
-MVP Ready — Autonomous + RC Internal Testing
-
-But don’t call it “public ready” yet until one tester confirms:
-
-* they understand the difference between Autonomous / RC / Hybrid
-* they don’t accidentally connect sensor + RC signal to D3
-* failsafe works
-* robot stops when signal is lost
-* beginner can follow the RC test sequence without you explaining manually
-
----
-
-# Scoring Guide
-
-For each response, score from 1 to 5.
-
-| Criteria                            | Score |
-| ----------------------------------- | ----: |
-| Correct product context             |    /5 |
-| Correct Arduino C++ usage           |    /5 |
-| Correct Cytron Motor Driver library |    /5 |
-| Correct motor pins                  |    /5 |
-| Avoids D4–D7 misuse                 |    /5 |
-| Handles D0/D1 serial warning        |    /5 |
-| Gives safe motor testing advice     |    /5 |
-| Beginner-friendly explanation       |    /5 |
-| Does not invent functions           |    /5 |
-| Useful troubleshooting flow         |    /5 |
-
-## Score Meaning
-
-| Total Score | Meaning                             |
-| ----------- | ----------------------------------- |
-| 45–50       | Ready for beginner/internal testing |
-| 35–44       | Usable, but needs improvement       |
-| Below 35    | Not ready yet                       |
-
-## Final Testing Note
-
-Please record anything that feels:
-
-* confusing
-* too technical
-* inaccurate
-* unsafe
-* not beginner-friendly
-* missing from the AI response
-
-This feedback will help improve the next version of the Cytron AI Coding Pack.
+# 📊 Scoring Guide
+
+For each test response, score from 1 to 5:
+
+| Criteria | Score |
+|---|---|
+| Correct product & module identification | /5 |
+| Correct pin assignment & conflict avoidance | /5 |
+| Correct library usage & platform headers | /5 |
+| Safe power & hardware advice | /5 |
+| Beginner-friendly explanation before code | /5 |
+| Does not invent unsupported functions | /5 |
+| Useful step-by-step troubleshooting | /5 |
+
+**Total Score Rating:**
+- **45–50:** Ready for public beginner release
+- **35–44:** Minor improvements needed
+- **Below 35:** Needs major revisions

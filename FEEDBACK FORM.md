@@ -1,26 +1,25 @@
-# Feedback Form — Cytron AI Coding Pack for URC10
+# Feedback Form — Cytron AI Coding Pack Repository
 
-Tester Name:
+**Tester Name:**  
+**Date:**  
+**Pack Tested:**
+* [ ] `cytron-ai-coding-pack-maker-esp32` (Cytron Maker ESP32 AI Coding Pack)
+* [ ] `cytron-ai-coding-pack-urc10` (URC10 Sumo Robot Controller)
 
-Date:
-
-Testing Method:
-
-* [ ] Antigravity only, no hardware
-* [ ] Antigravity with URC10 hardware
-* [ ] Antigravity with code compile only
+**Testing Method:**
+* [ ] Antigravity prompt testing only (no hardware)
+* [ ] Antigravity with live hardware
+* [ ] Code compile verification only
 * [ ] Other:
 
-Device / OS Used:
-
-Antigravity Version, if known:
+**Device / OS Used:**  
+**Antigravity Version:**  
 
 ---
 
 # 1. Overall Experience
 
 ## Was the setup easy to follow?
-
 * [ ] Very easy
 * [ ] Easy
 * [ ] Neutral
@@ -28,18 +27,15 @@ Antigravity Version, if known:
 * [ ] Very confusing
 
 Comments:
-
 ```text
 ```
 
-## Did you know what to do after opening the folder in Antigravity?
-
+## Did you know what to do after opening the coding pack folder in Antigravity?
 * [ ] Yes
 * [ ] Somewhat
 * [ ] No
 
 Comments:
-
 ```text
 ```
 
@@ -47,432 +43,155 @@ Comments:
 
 # 2. Product Understanding
 
-## Did the AI correctly identify the product as URC10 Sumo Robot Controller?
-
-* [ ] Yes
-* [ ] No
-* [ ] Not sure
-
-Comments:
-
-```text
-```
-
-## Did the AI correctly mention Arduino IDE / Arduino C++?
-
-* [ ] Yes
-* [ ] No
-* [ ] Not sure
-
-Comments:
-
-```text
-```
-
-## Did the AI correctly mention the Cytron Motor Drivers Library?
-
-* [ ] Yes
-* [ ] No
-* [ ] Not sure
-
-Comments:
-
-```text
-```
-
----
-
-# 3. Pin Mapping Accuracy
-
-## Did the AI correctly state the motor pins?
-
-Expected:
-
-* Motor 1: D5 PWM, D4 DIR
-
-* Motor 2: D6 PWM, D7 DIR
-
-* [ ] Yes
-
-* [ ] No
-
-* [ ] Partially
-
-* [ ] Not sure
-
-Comments:
-
-```text
-```
-
-## Did the AI avoid using D4, D5, D6, and D7 for sensors or unrelated outputs?
-
-* [ ] Yes
-* [ ] No
-* [ ] Not sure
-
-Comments:
-
-```text
-```
-
-## Did the AI warn about D0 and D1 being serial-related pins when needed?
-
-* [ ] Yes
-* [ ] No
-* [ ] Not applicable
-* [ ] Not sure
-
-Comments:
-
-```text
-```
-
-## Did the AI correctly state the recommended RC pin mapping (D2 Throttle, D3 Steering, A3 Switch)?
-
+## Did the AI correctly identify the target board and specs?
+* Maker ESP32: ESP32-WROOM-32E, USB Type-C, 1.35A 3.3V LDO
+* URC10: ATmega328P, Arduino Uno form factor, 10A motor driver
 * [ ] Yes
 * [ ] No
 * [ ] Partially
-* [ ] Not sure
 
 Comments:
-
-```text
-```
-
-## Did the AI warn against using D4, D5, D6, and D7 for RC input?
-
-* [ ] Yes
-* [ ] No
-* [ ] Not sure
-
-Comments:
-
-```text
-```
-
-## Did the AI warn against using D0 and D1 for RC input?
-
-* [ ] Yes
-* [ ] No
-* [ ] Not sure
-
-Comments:
-
-```text
-```
-
-## Did the AI highlight the pin conflict on D3 between the left IR sensor and RC steering?
-
-* [ ] Yes
-* [ ] No
-* [ ] Not sure
-
-Comments:
-
 ```text
 ```
 
 ---
 
-# 4. Safety
+# 3. Pin Mapping & Conflict Avoidance
 
-## Did the AI warn about reverse battery polarity?
+## Maker ESP32 Tests:
+- **Did the AI avoid GPIO26 for MAX7219 CS to prevent piezo buzzer screeching?**
+  * [ ] Yes (Recommended GPIO17 or clean alternative)
+  * [ ] No (Erroneously used GPIO26)
+  * [ ] Not tested
+- **Did the AI correctly state that GPIO34, 35, 36, and 39 are input-only pins?**
+  * [ ] Yes
+  * [ ] No
+  * [ ] Not tested
+- **Did the AI explain that GPIO27 and GPIO25 have onboard blue LEDs that flicker during SPI data/clock output?**
+  * [ ] Yes
+  * [ ] No
+  * [ ] Not tested
 
-* [ ] Yes
-* [ ] No
-* [ ] Not applicable
-
-Comments:
-
-```text
-```
-
-## Did the AI remind you to lift the robot wheels during motor testing?
-
-* [ ] Yes
-* [ ] No
-* [ ] Not applicable
-
-Comments:
-
-```text
-```
-
-## Did the AI give any unsafe advice?
-
-* [ ] No unsafe advice
-* [ ] Yes, unsafe advice was given
-* [ ] Not sure
-
-If yes, describe the unsafe advice:
-
-```text
-```
-
-## Did the AI remind you to connect a common Ground (GND) wire between the RC receiver and URC10?
-
-* [ ] Yes
-* [ ] No
-* [ ] Not applicable
-
-Comments:
-
-```text
-```
-
-## Did the AI explain that you must verify the RC receiver's voltage requirements (typically 5V)?
-
-* [ ] Yes
-* [ ] No
-* [ ] Not applicable
-
-Comments:
-
-```text
-```
-
-## Did the AI include a software signal-loss failsafe (motors set speed to 0 if signal is lost)?
-
-* [ ] Yes
-* [ ] No
-* [ ] Not applicable
-
-Comments:
-
-```text
-```
+## URC10 Tests:
+- **Did the AI state Motor 1 (D5 PWM, D4 DIR) and Motor 2 (D6 PWM, D7 DIR)?**
+  * [ ] Yes
+  * [ ] No
+  * [ ] Not tested
+- **Did the AI avoid reusing D4, D5, D6, and D7 for sensors or RC signals?**
+  * [ ] Yes
+  * [ ] No
+  * [ ] Not tested
+- **Did the AI highlight the pin conflict on D3 between opponent IR sensor and RC steering?**
+  * [ ] Yes
+  * [ ] No
+  * [ ] Not tested
 
 ---
 
-# 5. Code Quality
+# 4. Hardware & Power Safety
 
-## Did the generated code look correct for Arduino C++?
-
-* [ ] Yes
+## Did the AI warn about external 5V power requirements for high-current loads (e.g. 30-LED SK6812 strip)?
+* [ ] Yes (Required external 5V 2A supply with common GND)
 * [ ] No
-* [ ] Not sure
-* [ ] No code generated
+* [ ] Not applicable
 
-Comments:
-
-```text
-```
-
-## Did the AI invent any unknown or unsupported functions?
-
-Examples of suspicious functions:
-
-* motor.forward()
-
-* motor.backward()
-
-* digitalWrite style used incorrectly with the wrong context
-
-* random libraries not mentioned in the pack
-
-* [ ] No
-
-* [ ] Yes
-
-* [ ] Not sure
-
-If yes, list the function or code:
-
-```text
-```
-
-## Did the AI explain what changed from the original code?
-
+## Did the AI warn about reverse battery polarity on URC10?
 * [ ] Yes
 * [ ] No
 * [ ] Not applicable
 
-Comments:
-
-```text
-```
+## Did the AI remind you to lift robot wheels during initial motor tests?
+* [ ] Yes
+* [ ] No
+* [ ] Not applicable
 
 ---
 
-# 6. Beginner Friendliness
+# 5. Code Quality & Library Rules
 
-## Was the explanation easy for a beginner to understand?
+## Maker ESP32 Tests:
+- **Did the AI reject Blynk Legacy and require Blynk IoT headers (`BLYNK_TEMPLATE_ID`)?**
+  * [ ] Yes
+  * [ ] No
+  * [ ] Not tested
+- **Did the AI prevent buffer overflow memory corruption when converting NTP date strings to char arrays?**
+  * [ ] Yes (Used fixed buffer e.g. `char dateBuffer[30]`)
+  * [ ] No
+  * [ ] Not tested
 
+## URC10 Tests:
+- **Did the AI use the official `Cytron Motor Drivers Library` (`CytronMD`)?**
+  * [ ] Yes
+  * [ ] No
+  * [ ] Not tested
+- **Did the AI include an RC signal-loss failsafe (setting motor speeds to 0)?**
+  * [ ] Yes
+  * [ ] No
+  * [ ] Not tested
+
+---
+
+# 6. Beginner Friendliness & AI Coaching Role
+
+## Was the explanation clear and easy for a beginner to understand?
 * [ ] Very easy
 * [ ] Easy
 * [ ] Neutral
 * [ ] Too technical
 * [ ] Confusing
 
-Comments:
-
-```text
-```
-
-## Did the AI explain before giving code?
-
+## Did the AI explain concept and safety rules BEFORE generating code?
 * [ ] Yes
 * [ ] No
 * [ ] Sometimes
 
-Comments:
-
-```text
-```
-
-## Did the AI act like a learning coach instead of only giving code?
-
+## Did the AI act like a supportive learning coach?
 * [ ] Yes
 * [ ] No
 * [ ] Somewhat
 
-Comments:
+---
 
-```text
-```
+# 7. Test Score Sheet
+
+Score each criterion from 1 to 5:
+
+| Evaluation Criteria | Score |
+|---|---|
+| Correct product & microcontroller identification | /5 |
+| Pin mapping accuracy & pin conflict avoidance | /5 |
+| Power safety & electrical limit warnings | /5 |
+| Up-to-date library & API usage (Blynk IoT, MD_Parola, CytronMD) | /5 |
+| Fixed memory/buffer management (no overflow bugs) | /5 |
+| Clear beginner explanations before code | /5 |
+| Does not invent fictitious functions | /5 |
+| Useful step-by-step troubleshooting | /5 |
+
+**Total Score:** ______ / 40
 
 ---
 
-# 7. Debugging Help
+# 8. Issues Found & Suggested Fixes
 
-## Did the AI troubleshoot step by step?
+### Issue 1:
+- **Prompt Used:**  
+- **AI Response Problem:**  
+- **Suggested Fix:**  
 
-* [ ] Yes
-* [ ] No
-* [ ] Somewhat
-* [ ] Not tested
-
-Comments:
-
-```text
-```
-
-## Did the AI ask what to check before changing the code?
-
-* [ ] Yes
-* [ ] No
-* [ ] Sometimes
-* [ ] Not tested
-
-Comments:
-
-```text
-```
+### Issue 2:
+- **Prompt Used:**  
+- **AI Response Problem:**  
+- **Suggested Fix:**  
 
 ---
 
-# 8. Test Score
+# 9. Final Readiness Verdict
 
-Score each item from 1 to 5.
+* [ ] **Public Ready** — Pack is complete, safe, and ready for public release.
+* [ ] **Needs Small Improvements** — Minor prompt/documentation tweaks needed.
+* [ ] **Needs Major Revisions** — Technical or safety issues present.
+* [ ] **Not Ready**
 
-| Criteria                            | Score |
-| ----------------------------------- | ----: |
-| Correct product context             |    /5 |
-| Correct Arduino C++ usage           |    /5 |
-| Correct Cytron Motor Driver library |    /5 |
-| Correct motor pins                  |    /5 |
-| Avoids D4–D7 misuse                 |    /5 |
-| Handles D0/D1 serial warning        |    /5 |
-| Gives safe motor testing advice     |    /5 |
-| Beginner-friendly explanation       |    /5 |
-| Does not invent functions           |    /5 |
-| Useful troubleshooting flow         |    /5 |
-
-Total Score:
-
-```text
-```
-
----
-
-# 9. Issues Found
-
-List any wrong, confusing, or unsafe AI response.
-
-## Issue 1
-
-Prompt used:
-
-```text
-```
-
-AI response problem:
-
-```text
-```
-
-Suggested fix:
-
-```text
-```
-
-## Issue 2
-
-Prompt used:
-
-```text
-```
-
-AI response problem:
-
-```text
-```
-
-Suggested fix:
-
-```text
-```
-
-## Issue 3
-
-Prompt used:
-
-```text
-```
-
-AI response problem:
-
-```text
-```
-
-Suggested fix:
-
-```text
-```
-
----
-
-# 10. Final Verdict
-
-Choose one:
-
-* [ ] Ready for more internal testing (MVP Ready — Autonomous + RC Internal Testing)
-* [ ] Needs small improvements
-* [ ] Needs major improvements
-* [ ] Not ready
-
-## Public Readiness Verification
-
-Do not mark this pack as "Public Ready" unless you can confirm all of the following as a tester:
-
-* [ ] I understand the difference between Autonomous, RC, and Hybrid modes.
-* [ ] I did not connect both the IR sensor and the RC steering signal to D3 at the same time.
-* [ ] The signal-loss failsafe works correctly (the robot stops when transmitter signal is lost).
-* [ ] A beginner can follow the RC test sequence without manual coaching.
-
-Final comments:
-
-```text
-```
-
-Would you recommend this AI Coding Pack concept for other Cytron tutorials?
-
-* [ ] Yes
-* [ ] No
-* [ ] Maybe
-
-Why?
-
+**Final Tester Comments:**
 ```text
 ```
