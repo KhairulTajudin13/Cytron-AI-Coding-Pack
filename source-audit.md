@@ -94,3 +94,19 @@ This document contains technical audits, hardware specifications, and pin mappin
 * **Platform Status:** **Blynk Legacy is PERMANENTLY RETIRED (Dec 2022).** Original tutorial code using `BlynkSimpleEsp32.h` without Template IDs will not connect.
 * **Migration Requirement:** Must be updated for **Blynk IoT** (`blynk.cloud`) with `BLYNK_TEMPLATE_ID` & `BLYNK_TEMPLATE_NAME`.
 * **Power Safety:** 1M 30-LED SK6812 strip requires up to **1.8A max** at full white brightness. Powered via external 5V 2A DC supply with common GND.
+
+## 4. ESP32 Digital Clock Tutorial Audit
+* **Tutorial URL:** `https://my.cytron.io/tutorial/esp32-digital-clock`
+* **Tutorial Purpose:** Display an internet-synced real-time clock and date on an OLED display or Grove RGB LCD using ESP32 built-in NTP support without external RTC hardware.
+* **Revamp Status:** Grade A - Valid (Keep decision). Small revamp scope.
+* **Sample Code:** `sample-code/esp32-digital-clock-maker-esp32.ino`.
+* **Maker ESP32 Hardware Integration:**
+  * Connects I2C OLED / Grove LCD directly via the onboard **Maker Port** (4-pin Grove I2C connector).
+  * Pin Mapping: **SDA = GPIO21**, **SCL = GPIO22**.
+* **Technical Audits & Fixes Implemented:**
+  1. **Timezone Configuration:** Configured default offset `gmtOffset_sec = 28800` (GMT+8 for Malaysia / Singapore). Documented POSIX timezone strings (`setenv("TZ", ...)`, `tzset()`) for automatic DST adjustment.
+  2. **OLED I2C Address Variation:** Documented standard `0x3C` (generic OLED modules) vs `0x3D` (Adafruit OLED modules) I2C address differences.
+  3. **Async NTP Sync Robustness:** Added initial NTP sync retry loop (`syncRetries < 10`) after `timeClient.begin()` to prevent initial blank screen failures on slow Wi-Fi.
+  4. **WiFi Auto-Reconnection:** Added automatic Wi-Fi reconnect helper (`checkWiFiConnection()`) in `loop()` so the clock recovers seamlessly if the Wi-Fi connection drops.
+  5. **Flicker-Free Display Refresh:** Removed redundant screen clear calls on every loop cycle, refreshing display cleanly once per second.
+* **Libraries Required:** `Adafruit_SSD1306`, `Adafruit_GFX`, `NTPClient`, `TimeLib`.
